@@ -1,0 +1,1163 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Déclaration de Naissance</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --gold: #C9A84C;
+    --gold-light: #E8D09A;
+    --navy: #0D1B2A;
+    --navy-mid: #1A2E42;
+    --navy-light: #243B55;
+    --cream: #FAF6EF;
+    --cream-dark: #F0E9DC;
+    --text: #1A1208;
+    --text-muted: #6B5E4A;
+    --white: #FFFFFF;
+    --success: #2D7A4F;
+    --radius: 4px;
+  }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--cream);
+    color: var(--text);
+    min-height: 100vh;
+  }
+
+  /* ── Header ── */
+  header {
+    background: var(--navy);
+    padding: 0 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 72px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    border-bottom: 2px solid var(--gold);
+  }
+
+  .header-logo {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .logo-emblem {
+    width: 42px; height: 42px;
+    background: var(--gold);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Playfair Display', serif;
+    font-size: 20px;
+    color: var(--navy);
+    font-weight: 700;
+  }
+
+  .logo-text {
+    font-family: 'Playfair Display', serif;
+    color: var(--white);
+    font-size: 15px;
+    font-weight: 600;
+    line-height: 1.3;
+  }
+
+  .logo-text span {
+    display: block;
+    font-size: 11px;
+    font-family: 'DM Sans', sans-serif;
+    color: var(--gold-light);
+    font-weight: 300;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .header-badge {
+    font-size: 11px;
+    color: var(--gold-light);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    border: 1px solid var(--gold);
+    padding: 5px 12px;
+    border-radius: 2px;
+  }
+
+  /* ── Hero banner ── */
+  .hero {
+    background: var(--navy-mid);
+    padding: 48px 40px 40px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+      45deg,
+      transparent,
+      transparent 30px,
+      rgba(201,168,76,0.04) 30px,
+      rgba(201,168,76,0.04) 31px
+    );
+  }
+
+  .hero-tag {
+    display: inline-block;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    border-top: 1px solid var(--gold);
+    border-bottom: 1px solid var(--gold);
+    padding: 4px 16px;
+    margin-bottom: 16px;
+  }
+
+  .hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(26px, 4vw, 38px);
+    color: var(--white);
+    font-weight: 700;
+    margin-bottom: 10px;
+  }
+
+  .hero p {
+    color: #B0BEC5;
+    font-size: 14px;
+    font-weight: 300;
+    max-width: 480px;
+    margin: 0 auto;
+    line-height: 1.7;
+  }
+
+  /* ── Progress steps ── */
+  .steps-bar {
+    background: var(--cream-dark);
+    border-bottom: 1px solid #DDD5C4;
+    padding: 0 40px;
+    display: flex;
+    align-items: stretch;
+    overflow-x: auto;
+  }
+
+  .step {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 18px 24px 18px 0;
+    font-size: 12px;
+    color: var(--text-muted);
+    white-space: nowrap;
+    border-bottom: 3px solid transparent;
+    cursor: pointer;
+    transition: all .2s;
+    font-weight: 500;
+  }
+
+  .step.active {
+    color: var(--navy);
+    border-bottom-color: var(--gold);
+  }
+
+  .step.done {
+    color: var(--success);
+    border-bottom-color: var(--success);
+  }
+
+  .step-num {
+    width: 24px; height: 24px;
+    border-radius: 50%;
+    background: #D5CAB8;
+    color: var(--white);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px;
+    font-weight: 600;
+    flex-shrink: 0;
+    transition: background .2s;
+  }
+
+  .step.active .step-num { background: var(--gold); color: var(--navy); }
+  .step.done .step-num { background: var(--success); }
+
+  .step-sep { color: #CCC0A8; padding: 0 4px; font-size: 16px; }
+
+  /* ── Layout ── */
+  .main-layout {
+    max-width: 980px;
+    margin: 0 auto;
+    padding: 40px 24px 80px;
+    display: grid;
+    grid-template-columns: 1fr 300px;
+    gap: 32px;
+    align-items: start;
+  }
+
+  @media (max-width: 720px) {
+    .main-layout { grid-template-columns: 1fr; }
+    .sidebar { order: -1; }
+  }
+
+  /* ── Form card ── */
+  .form-card {
+    background: var(--white);
+    border: 1px solid #E0D8CA;
+    border-radius: var(--radius);
+    overflow: hidden;
+    animation: fadeUp .4s ease both;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .section-header {
+    background: var(--navy);
+    padding: 16px 28px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .section-header .icon {
+    width: 32px; height: 32px;
+    background: rgba(201,168,76,0.2);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 15px;
+  }
+
+  .section-header h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 16px;
+    color: var(--white);
+    font-weight: 600;
+  }
+
+  .section-header p {
+    font-size: 11px;
+    color: var(--gold-light);
+    font-weight: 300;
+  }
+
+  .form-body {
+    padding: 28px;
+  }
+
+  /* Section label (inside form) */
+  .form-section-label {
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--gold);
+    font-weight: 500;
+    margin-bottom: 16px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--cream-dark);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .form-section-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--cream-dark);
+  }
+
+  /* Fields */
+  .field-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 16px;
+  }
+
+  .field-row.triple { grid-template-columns: 1fr 1fr 1fr; }
+  .field-row.single { grid-template-columns: 1fr; }
+
+  @media (max-width: 600px) {
+    .field-row, .field-row.triple { grid-template-columns: 1fr; }
+  }
+
+  .field { display: flex; flex-direction: column; gap: 6px; }
+
+  label {
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--text-muted);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  label .req { color: var(--gold); margin-left: 2px; }
+
+  input, select, textarea {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    color: var(--text);
+    background: var(--cream);
+    border: 1px solid #D8CEBD;
+    border-radius: var(--radius);
+    padding: 10px 14px;
+    transition: border-color .2s, box-shadow .2s;
+    outline: none;
+    width: 100%;
+  }
+
+  input:focus, select:focus, textarea:focus {
+    border-color: var(--gold);
+    box-shadow: 0 0 0 3px rgba(201,168,76,0.12);
+    background: var(--white);
+  }
+
+  input.error, select.error {
+    border-color: #C0392B;
+    box-shadow: 0 0 0 3px rgba(192,57,43,0.1);
+  }
+
+  .field-hint { font-size: 11px; color: var(--text-muted); }
+  .field-error { font-size: 11px; color: #C0392B; display: none; }
+  input.error + .field-hint + .field-error,
+  input.error + .field-error,
+  select.error + .field-error { display: block; }
+
+  select { cursor: pointer; }
+
+  textarea { resize: vertical; min-height: 80px; }
+
+  /* Radio group */
+  .radio-group {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .radio-opt {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    padding: 9px 16px;
+    border: 1px solid #D8CEBD;
+    border-radius: var(--radius);
+    font-size: 13px;
+    transition: all .2s;
+    background: var(--cream);
+  }
+
+  .radio-opt:has(input:checked) {
+    border-color: var(--gold);
+    background: rgba(201,168,76,0.1);
+    color: var(--navy);
+    font-weight: 500;
+  }
+
+  .radio-opt input { width: auto; accent-color: var(--gold); }
+
+  /* Divider between sections */
+  .form-divider { margin: 24px 0; }
+
+  /* Buttons */
+  .btn-row {
+    display: flex;
+    gap: 12px;
+    justify-content: flex-end;
+    margin-top: 28px;
+    padding-top: 20px;
+    border-top: 1px solid var(--cream-dark);
+  }
+
+  .btn {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    padding: 11px 28px;
+    border-radius: var(--radius);
+    cursor: pointer;
+    border: none;
+    transition: all .2s;
+    letter-spacing: 0.04em;
+  }
+
+  .btn-outline {
+    background: transparent;
+    border: 1px solid #D8CEBD;
+    color: var(--text-muted);
+  }
+  .btn-outline:hover { border-color: var(--navy); color: var(--navy); }
+
+  .btn-primary {
+    background: var(--navy);
+    color: var(--white);
+    display: flex; align-items: center; gap: 8px;
+  }
+  .btn-primary:hover { background: var(--navy-light); transform: translateY(-1px); box-shadow: 0 4px 14px rgba(13,27,42,0.25); }
+  .btn-primary:active { transform: translateY(0); }
+
+  .btn-gold {
+    background: var(--gold);
+    color: var(--navy);
+    font-weight: 600;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .btn-gold:hover { background: #B8942E; transform: translateY(-1px); box-shadow: 0 4px 14px rgba(201,168,76,0.35); }
+
+  /* ── Sidebar ── */
+  .sidebar { display: flex; flex-direction: column; gap: 20px; }
+
+  .info-card {
+    background: var(--white);
+    border: 1px solid #E0D8CA;
+    border-radius: var(--radius);
+    overflow: hidden;
+    animation: fadeUp .4s ease .1s both;
+  }
+
+  .info-card-head {
+    background: var(--cream-dark);
+    padding: 12px 18px;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    font-weight: 500;
+    border-bottom: 1px solid #DDD5C4;
+    display: flex; align-items: center; gap: 8px;
+  }
+
+  .info-card-body { padding: 18px; }
+
+  .info-item {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 14px;
+    align-items: flex-start;
+    font-size: 13px;
+    color: var(--text-muted);
+    line-height: 1.5;
+  }
+
+  .info-item:last-child { margin-bottom: 0; }
+
+  .info-item .dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--gold);
+    flex-shrink: 0;
+    margin-top: 7px;
+  }
+
+  .deadline-box {
+    background: var(--navy);
+    border-radius: var(--radius);
+    padding: 16px;
+    text-align: center;
+    color: var(--white);
+  }
+
+  .deadline-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 42px;
+    color: var(--gold);
+    line-height: 1;
+    font-weight: 700;
+  }
+
+  .deadline-label {
+    font-size: 11px;
+    color: #B0BEC5;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-top: 4px;
+  }
+
+  .deadline-desc {
+    font-size: 12px;
+    color: #8EACBB;
+    margin-top: 8px;
+    line-height: 1.5;
+  }
+
+  /* Success overlay */
+  .success-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(13,27,42,0.85);
+    z-index: 999;
+    align-items: center;
+    justify-content: center;
+    animation: fadeIn .3s ease;
+  }
+
+  .success-overlay.show { display: flex; }
+
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+  .success-box {
+    background: var(--white);
+    border-radius: 6px;
+    padding: 48px 56px;
+    text-align: center;
+    max-width: 440px;
+    width: 90%;
+    animation: popIn .35s cubic-bezier(.34,1.56,.64,1) both;
+    border-top: 4px solid var(--gold);
+  }
+
+  @keyframes popIn {
+    from { opacity: 0; transform: scale(.85); }
+    to   { opacity: 1; transform: scale(1); }
+  }
+
+  .success-icon {
+    width: 72px; height: 72px;
+    background: rgba(45,122,79,0.1);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 32px;
+    margin: 0 auto 20px;
+  }
+
+  .success-box h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 24px;
+    color: var(--navy);
+    margin-bottom: 10px;
+  }
+
+  .success-box p {
+    font-size: 14px;
+    color: var(--text-muted);
+    line-height: 1.65;
+    margin-bottom: 8px;
+  }
+
+  .ref-code {
+    background: var(--cream);
+    border: 1px dashed #C0AE8A;
+    border-radius: var(--radius);
+    padding: 12px 20px;
+    font-family: monospace;
+    font-size: 18px;
+    color: var(--navy);
+    letter-spacing: 0.2em;
+    margin: 20px 0;
+    font-weight: 700;
+  }
+
+  .success-actions {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    margin-top: 20px;
+  }
+</style>
+</head>
+<body>
+
+<!-- Header -->
+<header>
+  <div class="header-logo">
+    <div class="logo-emblem">É</div>
+    <div class="logo-text">
+      État Civil Numérique
+      <span>République du Togo</span>
+    </div>
+  </div>
+  <div class="header-badge">Service officiel</div>
+</header>
+
+<!-- Hero -->
+<div class="hero">
+  <div class="hero-tag">Acte de naissance</div>
+  <h1>Déclaration de Naissance</h1>
+  <p>Enregistrez officiellement la naissance de votre enfant. Complétez le formulaire ci-dessous avec soin — toutes les informations sont vérifiées.</p>
+</div>
+
+<!-- Progress steps -->
+<div class="steps-bar">
+  <div class="step active" data-step="1">
+    <div class="step-num">1</div>
+    Enfant
+  </div>
+  <div class="step-sep">›</div>
+  <div class="step" data-step="2">
+    <div class="step-num">2</div>
+    Père
+  </div>
+  <div class="step-sep">›</div>
+  <div class="step" data-step="3">
+    <div class="step-num">3</div>
+    Mère
+  </div>
+  <div class="step-sep">›</div>
+  <div class="step" data-step="4">
+    <div class="step-num">4</div>
+    Validation
+  </div>
+</div>
+
+<!-- Main layout -->
+<div class="main-layout">
+
+  <!-- Form -->
+  <div>
+
+    <!-- SECTION 1 : Enfant -->
+    <div class="form-card" id="section-1">
+      <div class="section-header">
+        <div class="icon">👶</div>
+        <div>
+          <h2>Informations sur l'enfant</h2>
+          <p>Données d'identité et de naissance</p>
+        </div>
+      </div>
+      <div class="form-body">
+
+        <div class="form-section-label">Identité</div>
+
+        <div class="field-row">
+          <div class="field">
+            <label>Nom de famille <span class="req">*</span></label>
+            <input type="text" id="nom" placeholder="ex : AGBODJI" oninput="clearError(this)">
+            <div class="field-error">Ce champ est obligatoire</div>
+          </div>
+          <div class="field">
+            <label>Prénom(s) <span class="req">*</span></label>
+            <input type="text" id="prenom" placeholder="ex : Kofi Emmanuel" oninput="clearError(this)">
+            <div class="field-error">Ce champ est obligatoire</div>
+          </div>
+        </div>
+
+        <div class="field-row single" style="margin-bottom:16px">
+          <div class="field">
+            <label>Sexe <span class="req">*</span></label>
+            <div class="radio-group" id="sexe-group">
+              <label class="radio-opt"><input type="radio" name="sexe" value="M"> Masculin</label>
+              <label class="radio-opt"><input type="radio" name="sexe" value="F"> Féminin</label>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-divider"></div>
+        <div class="form-section-label">Naissance</div>
+
+        <div class="field-row">
+          <div class="field">
+            <label>Date de naissance <span class="req">*</span></label>
+            <input type="date" id="date-naiss" oninput="clearError(this)">
+            <div class="field-error">Ce champ est obligatoire</div>
+          </div>
+          <div class="field">
+            <label>Heure de naissance</label>
+            <input type="time" id="heure-naiss" placeholder="ex : 08:35">
+            <div class="field-hint">Facultatif</div>
+          </div>
+        </div>
+
+        <div class="field-row">
+          <div class="field">
+            <label>Lieu de naissance <span class="req">*</span></label>
+            <input type="text" id="lieu-naiss" placeholder="ex : Lomé, CHU Sylvanus Olympio" oninput="clearError(this)">
+            <div class="field-error">Ce champ est obligatoire</div>
+          </div>
+          <div class="field">
+            <label>Pays de naissance <span class="req">*</span></label>
+            <select id="pays-naiss" onchange="clearError(this)">
+              <option value="">— Sélectionner —</option>
+              <option value="TG" selected>Togo</option>
+              <option value="BJ">Bénin</option>
+              <option value="GH">Ghana</option>
+              <option value="CI">Côte d'Ivoire</option>
+              <option value="SN">Sénégal</option>
+              <option value="FR">France</option>
+              <option value="OTHER">Autre</option>
+            </select>
+            <div class="field-error">Sélectionnez un pays</div>
+          </div>
+        </div>
+
+        <div class="field-row">
+          <div class="field">
+            <label>Type d'établissement</label>
+            <select id="type-etab">
+              <option value="">— Sélectionner —</option>
+              <option>Hôpital / Clinique</option>
+              <option>Maternité publique</option>
+              <option>Maternité privée</option>
+              <option>Domicile</option>
+              <option>Autre</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Poids à la naissance (kg)</label>
+            <input type="number" id="poids" step="0.1" min="0.5" max="8" placeholder="ex : 3.2">
+            <div class="field-hint">Facultatif</div>
+          </div>
+        </div>
+
+        <div class="btn-row">
+          <button class="btn btn-gold" onclick="goToStep(2)">
+            Suivant : Informations du père →
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECTION 2 : Père -->
+    <div class="form-card" id="section-2" style="display:none; margin-top:20px">
+      <div class="section-header">
+        <div class="icon">👨</div>
+        <div>
+          <h2>Informations sur le père</h2>
+          <p>Identité et coordonnées du père</p>
+        </div>
+      </div>
+      <div class="form-body">
+
+        <div class="form-section-label">Identité du père</div>
+
+        <div class="field-row">
+          <div class="field">
+            <label>Nom <span class="req">*</span></label>
+            <input type="text" id="pere-nom" placeholder="ex : AGBODJI" oninput="clearError(this)">
+            <div class="field-error">Ce champ est obligatoire</div>
+          </div>
+          <div class="field">
+            <label>Prénom(s) <span class="req">*</span></label>
+            <input type="text" id="pere-prenom" placeholder="ex : Kwame" oninput="clearError(this)">
+            <div class="field-error">Ce champ est obligatoire</div>
+          </div>
+        </div>
+
+        <div class="field-row triple">
+          <div class="field">
+            <label>Date de naissance</label>
+            <input type="date" id="pere-ddn">
+          </div>
+          <div class="field">
+            <label>Nationalité</label>
+            <select id="pere-nat">
+              <option value="TG">Togolaise</option>
+              <option value="BJ">Béninoise</option>
+              <option value="GH">Ghanéenne</option>
+              <option value="FR">Française</option>
+              <option value="OTHER">Autre</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Profession</label>
+            <input type="text" id="pere-prof" placeholder="ex : Enseignant">
+          </div>
+        </div>
+
+        <div class="form-divider"></div>
+        <div class="form-section-label">Contact</div>
+
+        <div class="field-row">
+          <div class="field">
+            <label>Téléphone <span class="req">*</span></label>
+            <input type="tel" id="pere-tel" placeholder="ex : +228 90 00 00 00" oninput="clearError(this)">
+            <div class="field-error">Ce champ est obligatoire</div>
+          </div>
+          <div class="field">
+            <label>Email</label>
+            <input type="email" id="pere-email" placeholder="ex : kofi@email.com">
+            <div class="field-hint">Facultatif</div>
+          </div>
+        </div>
+
+        <div class="field-row single">
+          <div class="field">
+            <label>Adresse de résidence</label>
+            <input type="text" id="pere-adresse" placeholder="ex : Quartier Bè, Lomé">
+          </div>
+        </div>
+
+        <div class="btn-row">
+          <button class="btn btn-outline" onclick="goToStep(1)">← Retour</button>
+          <button class="btn btn-gold" onclick="goToStep(3)">Suivant : Informations de la mère →</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECTION 3 : Mère -->
+    <div class="form-card" id="section-3" style="display:none; margin-top:20px">
+      <div class="section-header">
+        <div class="icon">👩</div>
+        <div>
+          <h2>Informations sur la mère</h2>
+          <p>Identité et coordonnées de la mère</p>
+        </div>
+      </div>
+      <div class="form-body">
+
+        <div class="form-section-label">Identité de la mère</div>
+
+        <div class="field-row">
+          <div class="field">
+            <label>Nom de naissance <span class="req">*</span></label>
+            <input type="text" id="mere-nom" placeholder="ex : DOSSOU" oninput="clearError(this)">
+            <div class="field-error">Ce champ est obligatoire</div>
+          </div>
+          <div class="field">
+            <label>Prénom(s) <span class="req">*</span></label>
+            <input type="text" id="mere-prenom" placeholder="ex : Akosua" oninput="clearError(this)">
+            <div class="field-error">Ce champ est obligatoire</div>
+          </div>
+        </div>
+
+        <div class="field-row triple">
+          <div class="field">
+            <label>Date de naissance</label>
+            <input type="date" id="mere-ddn">
+          </div>
+          <div class="field">
+            <label>Nationalité</label>
+            <select id="mere-nat">
+              <option value="TG">Togolaise</option>
+              <option value="BJ">Béninoise</option>
+              <option value="GH">Ghanéenne</option>
+              <option value="FR">Française</option>
+              <option value="OTHER">Autre</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Profession</label>
+            <input type="text" id="mere-prof" placeholder="ex : Commerçante">
+          </div>
+        </div>
+
+        <div class="form-divider"></div>
+        <div class="form-section-label">Contact</div>
+
+        <div class="field-row">
+          <div class="field">
+            <label>Téléphone <span class="req">*</span></label>
+            <input type="tel" id="mere-tel" placeholder="ex : +228 91 00 00 00" oninput="clearError(this)">
+            <div class="field-error">Ce champ est obligatoire</div>
+          </div>
+          <div class="field">
+            <label>Email</label>
+            <input type="email" id="mere-email" placeholder="ex : akosua@email.com">
+            <div class="field-hint">Facultatif</div>
+          </div>
+        </div>
+
+        <div class="field-row single">
+          <div class="field">
+            <label>Adresse de résidence</label>
+            <input type="text" id="mere-adresse" placeholder="ex : Quartier Bè, Lomé">
+          </div>
+        </div>
+
+        <div class="form-divider"></div>
+        <div class="form-section-label">Déclarant</div>
+
+        <div class="field-row">
+          <div class="field">
+            <label>Qui déclare la naissance ? <span class="req">*</span></label>
+            <select id="declarant">
+              <option value="">— Sélectionner —</option>
+              <option>Le père</option>
+              <option>La mère</option>
+              <option>Le médecin / sage-femme</option>
+              <option>Un représentant légal</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Observations (optionnel)</label>
+            <textarea id="observations" placeholder="Informations complémentaires..."></textarea>
+          </div>
+        </div>
+
+        <div class="btn-row">
+          <button class="btn btn-outline" onclick="goToStep(2)">← Retour</button>
+          <button class="btn btn-gold" onclick="submitForm()">✓ Soumettre la déclaration</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Sidebar -->
+  <div class="sidebar">
+
+    <div class="info-card">
+      <div class="info-card-head">⏱ Délai légal</div>
+      <div class="info-card-body">
+        <div class="deadline-box">
+          <div class="deadline-num">30</div>
+          <div class="deadline-label">jours</div>
+          <div class="deadline-desc">À compter de la date de naissance pour effectuer la déclaration</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="info-card">
+      <div class="info-card-head">📋 Documents requis</div>
+      <div class="info-card-body">
+        <div class="info-item"><div class="dot"></div><span>Certificat médical de naissance (original)</span></div>
+        <div class="info-item"><div class="dot"></div><span>Pièce d'identité du déclarant</span></div>
+        <div class="info-item"><div class="dot"></div><span>Livret de famille (si disponible)</span></div>
+        <div class="info-item"><div class="dot"></div><span>Actes de naissance des parents</span></div>
+      </div>
+    </div>
+
+    <div class="info-card">
+      <div class="info-card-head">ℹ️ Informations utiles</div>
+      <div class="info-card-body">
+        <div class="info-item"><div class="dot"></div><span>La déclaration est <strong>gratuite</strong> dans les délais légaux</span></div>
+        <div class="info-item"><div class="dot"></div><span>Un numéro de référence vous sera attribué à la soumission</span></div>
+        <div class="info-item"><div class="dot"></div><span>L'acte officiel est disponible sous <strong>72h</strong></span></div>
+        <div class="info-item"><div class="dot"></div><span>Toute déclaration tardive peut entraîner des frais</span></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- Success overlay -->
+<div class="success-overlay" id="success-overlay">
+  <div class="success-box">
+    <div class="success-icon">✅</div>
+    <h2>Déclaration enregistrée !</h2>
+    <p>La naissance a été enregistrée avec succès. Votre numéro de référence :</p>
+    <div class="ref-code" id="ref-code">TG-2026-000000</div>
+    <p style="font-size:12px">Conservez ce numéro. L'acte de naissance officiel sera disponible dans les <strong>72 heures</strong>.</p>
+    <div class="success-actions">
+      <button class="btn btn-outline" onclick="closeSuccess()">Fermer</button>
+      <button class="btn btn-primary" onclick="downloadRecu()">📄 Télécharger le reçu</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  let currentStep = 1;
+
+  function goToStep(n) {
+    // Validation basique avant de passer à l'étape suivante
+    if (n > currentStep) {
+      if (!validateStep(currentStep)) return;
+    }
+
+    document.getElementById('section-' + currentStep).style.display = 'none';
+    document.getElementById('section-' + n).style.display = 'block';
+
+    // Update steps bar
+    document.querySelectorAll('.step').forEach(s => {
+      const sn = parseInt(s.dataset.step);
+      s.classList.remove('active', 'done');
+      if (sn === n) s.classList.add('active');
+      else if (sn < n) s.classList.add('done');
+    });
+
+    currentStep = n;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function validateStep(step) {
+    let valid = true;
+
+    if (step === 1) {
+      const fields = ['nom', 'prenom', 'date-naiss', 'lieu-naiss', 'pays-naiss'];
+      fields.forEach(id => {
+        const el = document.getElementById(id);
+        if (!el.value.trim()) { el.classList.add('error'); valid = false; }
+      });
+      // Check sexe
+      if (!document.querySelector('input[name="sexe"]:checked')) {
+        document.getElementById('sexe-group').style.outline = '2px solid #C0392B';
+        valid = false;
+      }
+    }
+
+    if (step === 2) {
+      const fields = ['pere-nom', 'pere-prenom', 'pere-tel'];
+      fields.forEach(id => {
+        const el = document.getElementById(id);
+        if (!el.value.trim()) { el.classList.add('error'); valid = false; }
+      });
+    }
+
+    if (step === 3) {
+      const fields = ['mere-nom', 'mere-prenom', 'mere-tel'];
+      fields.forEach(id => {
+        const el = document.getElementById(id);
+        if (!el.value.trim()) { el.classList.add('error'); valid = false; }
+      });
+    }
+
+    if (!valid) {
+      const firstErr = document.querySelector('.error');
+      if (firstErr) firstErr.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+
+    return valid;
+  }
+
+  function clearError(el) {
+    el.classList.remove('error');
+    document.getElementById('sexe-group').style.outline = 'none';
+  }
+
+  // ── URL du serveur backend ──
+  const API = 'http://localhost:3000';
+
+  // ── Vérifier si l'utilisateur est connecté dès l'ouverture de la page ──
+  window.addEventListener('DOMContentLoaded', () => {
+    const token = localStorage.getItem('token');
+    const utilisateur = JSON.parse(localStorage.getItem('utilisateur') || 'null');
+    if (!token) {
+      // Pas de token → rediriger vers la page d'accueil
+      alert('Vous devez vous connecter pour accéder à cette page.');
+      window.location.href = 'accueil.html';
+    } else if (utilisateur) {
+      // Afficher le nom de l'utilisateur connecté dans le header si possible
+      const badge = document.querySelector('.header-badge');
+      if (badge) badge.textContent = utilisateur.prenom + ' ' + utilisateur.nom;
+    }
+  });
+
+  // ── Soumettre le formulaire (appel réel au serveur) ──
+  async function submitForm() {
+    if (!validateStep(3)) return;
+
+    // Récupérer le token de connexion
+    const token = localStorage.getItem('token');
+    if (!token) {
+      alert('Session expirée. Veuillez vous reconnecter.');
+      window.location.href = 'accueil.html';
+      return;
+    }
+
+    // Collecter toutes les données du formulaire
+    const data = {
+      // Enfant
+      enfant_nom:          document.getElementById('nom').value.trim(),
+      enfant_prenom:       document.getElementById('prenom').value.trim(),
+      enfant_sexe:         document.querySelector('input[name="sexe"]:checked')?.value,
+      date_naissance:      document.getElementById('date-naiss').value,
+      heure_naissance:     document.getElementById('heure-naiss').value || null,
+      lieu_naissance:      document.getElementById('lieu-naiss').value.trim(),
+      pays_naissance:      document.getElementById('pays-naiss').value,
+      type_etablissement:  document.getElementById('type-etab').value || null,
+      poids_naissance:     document.getElementById('poids').value || null,
+      // Père
+      pere_nom:            document.getElementById('pere-nom').value.trim(),
+      pere_prenom:         document.getElementById('pere-prenom').value.trim(),
+      pere_date_naissance: document.getElementById('pere-ddn').value || null,
+      pere_nationalite:    document.getElementById('pere-nat').value || null,
+      pere_profession:     document.getElementById('pere-prof').value || null,
+      pere_telephone:      document.getElementById('pere-tel').value.trim(),
+      pere_email:          document.getElementById('pere-email').value || null,
+      pere_adresse:        document.getElementById('pere-adresse').value || null,
+      // Mère
+      mere_nom:            document.getElementById('mere-nom').value.trim(),
+      mere_prenom:         document.getElementById('mere-prenom').value.trim(),
+      mere_date_naissance: document.getElementById('mere-ddn').value || null,
+      mere_nationalite:    document.getElementById('mere-nat').value || null,
+      mere_profession:     document.getElementById('mere-prof').value || null,
+      mere_telephone:      document.getElementById('mere-tel').value.trim(),
+      mere_email:          document.getElementById('mere-email').value || null,
+      mere_adresse:        document.getElementById('mere-adresse').value || null,
+      // Déclarant
+      declarant:           document.getElementById('declarant').value || null,
+      observations:        document.getElementById('observations').value || null,
+    };
+
+    // Désactiver le bouton pendant l'envoi
+    const btnSoumettre = document.querySelector('#section-3 .btn-gold');
+    const texteOriginal = btnSoumettre.textContent;
+    btnSoumettre.textContent = 'Envoi en cours...';
+    btnSoumettre.disabled = true;
+
+    try {
+      // Envoyer les données au serveur
+      const response = await fetch(API + '/api/naissances', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + token  // Token de connexion
+        },
+        body: JSON.stringify(data)
+      });
+
+      const result = await response.json();
+
+      if (response.ok) {
+        // Succès ! Marquer toutes les étapes comme done
+        document.querySelectorAll('.step').forEach(s => {
+          s.classList.remove('active');
+          s.classList.add('done');
+        });
+        // Afficher le vrai numéro de référence du serveur
+        document.getElementById('ref-code').textContent = result.reference;
+        document.getElementById('success-overlay').classList.add('show');
+      } else if (response.status === 401 || response.status === 403) {
+        alert('Session expirée. Veuillez vous reconnecter.');
+        localStorage.removeItem('token');
+        window.location.href = 'accueil.html';
+      } else {
+        alert('Erreur : ' + (result.erreur || 'Problème lors de l\'enregistrement.'));
+      }
+
+    } catch (err) {
+      alert('Impossible de contacter le serveur. Vérifiez que le backend est démarré sur http://localhost:3000');
+    } finally {
+      btnSoumettre.textContent = texteOriginal;
+      btnSoumettre.disabled = false;
+    }
+  }
+
+  function closeSuccess() {
+    document.getElementById('success-overlay').classList.remove('show');
+    location.reload();
+  }
+
+  function downloadRecu() {
+    const token = localStorage.getItem('token');
+    const reference = document.getElementById('ref-code').textContent;
+
+    if (!token || !reference) {
+      alert('Impossible de télécharger le PDF. Veuillez réessayer.');
+      return;
+    }
+
+    // Créer un lien temporaire pour télécharger le PDF
+    const url = `http://localhost:3000/api/naissances/${reference}/pdf`;
+
+    fetch(url, {
+      headers: { 'Authorization': 'Bearer ' + token }
+    })
+    .then(response => {
+      if (!response.ok) throw new Error('Erreur lors du téléchargement');
+      return response.blob();
+    })
+    .then(blob => {
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.download = `acte-naissance-${reference}.pdf`;
+      link.click();
+      URL.revokeObjectURL(link.href);
+    })
+    .catch(err => {
+      alert('Erreur lors du téléchargement du PDF. Vérifiez que le serveur est démarré.');
+    });
+  }
+</script>
+</body>
+</html>

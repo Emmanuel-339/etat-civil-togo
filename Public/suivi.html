@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Suivi de déclaration — État Civil</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --gold: #C9A84C;
+    --gold-light: #E8D09A;
+    --navy: #0D1B2A;
+    --navy-mid: #1A2E42;
+    --cream: #FAF6EF;
+    --cream-dark: #F0E9DC;
+    --text: #1A1208;
+    --text-muted: #6B5E4A;
+    --white: #FFFFFF;
+    --success: #2D7A4F;
+    --warning: #B7791F;
+    --radius: 4px;
+  }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--cream);
+    color: var(--text);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* ── Header ── */
+  header {
+    background: var(--navy);
+    padding: 0 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 68px;
+    border-bottom: 2px solid var(--gold);
+  }
+
+  .header-logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+  }
+
+  .logo-emblem {
+    width: 38px; height: 38px;
+    background: var(--gold);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Playfair Display', serif;
+    font-size: 18px;
+    color: var(--navy);
+    font-weight: 700;
+  }
+
+  .logo-text {
+    font-family: 'Playfair Display', serif;
+    color: var(--white);
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1.3;
+  }
+
+  .logo-text span {
+    display: block;
+    font-size: 10px;
+    font-family: 'DM Sans', sans-serif;
+    color: var(--gold-light);
+    font-weight: 300;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .header-badge {
+    font-size: 11px;
+    color: var(--gold-light);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    border: 1px solid var(--gold);
+    padding: 5px 12px;
+    border-radius: 2px;
+  }
+
+  /* ── Main ── */
+  .main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 48px 24px;
+  }
+
+  /* ── Search box ── */
+  .search-box {
+    width: 100%;
+    max-width: 540px;
+    background: var(--white);
+    border: 1px solid #E0D8CA;
+    border-radius: var(--radius);
+    overflow: hidden;
+    margin-bottom: 24px;
+    animation: fadeUp .4s ease both;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .search-head {
+    background: var(--navy);
+    padding: 20px 28px;
+    text-align: center;
+  }
+
+  .search-head .tag {
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 8px;
+  }
+
+  .search-head h1 {
+    font-family: 'Playfair Display', serif;
+    color: var(--white);
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+
+  .search-head p {
+    font-size: 12px;
+    color: #B0BEC5;
+    font-weight: 300;
+  }
+
+  .search-body {
+    padding: 24px 28px;
+  }
+
+  .input-wrap {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 12px;
+  }
+
+  .ref-input {
+    flex: 1;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    padding: 12px 16px;
+    border: 1px solid #D8CEBD;
+    border-radius: var(--radius);
+    background: var(--cream);
+    outline: none;
+    text-transform: uppercase;
+    transition: border-color .2s, box-shadow .2s;
+    color: var(--navy);
+  }
+
+  .ref-input:focus {
+    border-color: var(--gold);
+    box-shadow: 0 0 0 3px rgba(201,168,76,0.12);
+  }
+
+  .ref-input::placeholder {
+    text-transform: none;
+    font-weight: 300;
+    letter-spacing: 0;
+    color: #B0A090;
+    font-size: 13px;
+  }
+
+  .btn-rechercher {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--navy);
+    color: var(--white);
+    border: none;
+    padding: 12px 24px;
+    border-radius: var(--radius);
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all .2s;
+    white-space: nowrap;
+  }
+
+  .btn-rechercher:hover { background: var(--navy-mid); }
+  .btn-rechercher:disabled { opacity: 0.6; pointer-events: none; }
+
+  .search-hint {
+    font-size: 11px;
+    color: var(--text-muted);
+    text-align: center;
+  }
+
+  .search-hint strong { color: var(--navy); }
+
+  /* ── Résultat ── */
+  .result-box {
+    width: 100%;
+    max-width: 540px;
+    display: none;
+    animation: fadeUp .3s ease both;
+  }
+
+  .result-box.show { display: block; }
+
+  /* Erreur */
+  .result-error {
+    background: #FDECEA;
+    border: 1px solid #F5C6CB;
+    border-radius: var(--radius);
+    padding: 20px 24px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .result-error .icon { font-size: 28px; }
+
+  .result-error h3 {
+    font-size: 15px;
+    color: #C0392B;
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+
+  .result-error p { font-size: 12px; color: #E74C3C; }
+
+  /* Succès */
+  .result-success {
+    background: var(--white);
+    border: 1px solid #E0D8CA;
+    border-radius: var(--radius);
+    overflow: hidden;
+  }
+
+  .result-success-head {
+    background: var(--navy);
+    padding: 16px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .result-success-head h3 {
+    font-family: 'Playfair Display', serif;
+    color: var(--white);
+    font-size: 15px;
+  }
+
+  .result-success-head .ref {
+    font-family: monospace;
+    font-size: 13px;
+    color: var(--gold);
+    letter-spacing: 0.08em;
+  }
+
+  .result-success-body { padding: 24px; }
+
+  /* Statut visuel */
+  .statut-bloc {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 16px 20px;
+    border-radius: var(--radius);
+    margin-bottom: 20px;
+  }
+
+  .statut-bloc.en-cours {
+    background: rgba(183,121,31,0.08);
+    border: 1px solid rgba(183,121,31,0.2);
+  }
+
+  .statut-bloc.valide {
+    background: rgba(45,122,79,0.08);
+    border: 1px solid rgba(45,122,79,0.2);
+  }
+
+  .statut-bloc.rejete {
+    background: rgba(192,57,43,0.08);
+    border: 1px solid rgba(192,57,43,0.2);
+  }
+
+  .statut-icon { font-size: 32px; }
+
+  .statut-info h4 {
+    font-size: 15px;
+    font-weight: 600;
+    margin-bottom: 3px;
+  }
+
+  .statut-bloc.en-cours .statut-info h4 { color: var(--warning); }
+  .statut-bloc.valide .statut-info h4 { color: var(--success); }
+  .statut-bloc.rejete .statut-info h4 { color: #C0392B; }
+
+  .statut-info p { font-size: 12px; color: var(--text-muted); }
+
+  /* Infos enfant */
+  .info-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin-bottom: 20px;
+  }
+
+  .info-item { display: flex; flex-direction: column; gap: 3px; }
+
+  .info-label {
+    font-size: 10px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  .info-value {
+    font-size: 14px;
+    color: var(--navy);
+    font-weight: 500;
+  }
+
+  /* Timeline */
+  .timeline {
+    border-top: 1px solid var(--cream-dark);
+    padding-top: 16px;
+  }
+
+  .timeline-title {
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 14px;
+  }
+
+  .timeline-item {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 12px;
+    align-items: flex-start;
+  }
+
+  .timeline-dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    margin-top: 4px;
+    flex-shrink: 0;
+  }
+
+  .timeline-dot.done { background: var(--success); }
+  .timeline-dot.active { background: var(--warning); }
+  .timeline-dot.pending { background: #D8CEBD; }
+
+  .timeline-item-text { font-size: 13px; }
+  .timeline-item-label { color: var(--text); font-weight: 500; }
+  .timeline-item-date { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+
+  /* Bouton nouvelle recherche */
+  .btn-nouvelle-recherche {
+    width: 100%;
+    margin-top: 16px;
+    font-family: 'DM Sans', sans-serif;
+    background: transparent;
+    border: 1px solid #D8CEBD;
+    color: var(--text-muted);
+    padding: 10px;
+    border-radius: var(--radius);
+    font-size: 13px;
+    cursor: pointer;
+    transition: all .2s;
+  }
+
+  .btn-nouvelle-recherche:hover { border-color: var(--navy); color: var(--navy); }
+
+  /* ── Footer ── */
+  footer {
+    background: var(--navy);
+    padding: 14px 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .footer-text { font-size: 11px; color: #8EACBB; }
+
+  .footer-link {
+    font-size: 11px;
+    color: var(--gold-light);
+    text-decoration: none;
+  }
+
+  .footer-link:hover { text-decoration: underline; }
+</style>
+</head>
+<body>
+
+<!-- Header -->
+<header>
+  <a class="header-logo" href="accueil_connecte.html">
+    <div class="logo-emblem">É</div>
+    <div class="logo-text">
+      État Civil Numérique
+      <span>République du Togo</span>
+    </div>
+  </a>
+  <div class="header-badge">Suivi public</div>
+</header>
+
+<!-- Main -->
+<div class="main">
+
+  <!-- Boîte de recherche -->
+  <div class="search-box">
+    <div class="search-head">
+      <div class="tag">Service public</div>
+      <h1>Suivi de déclaration</h1>
+      <p>Entrez votre numéro de référence pour connaître l'état de votre déclaration</p>
+    </div>
+    <div class="search-body">
+      <div class="input-wrap">
+        <input
+          class="ref-input"
+          type="text"
+          id="ref-input"
+          placeholder="ex : TG-2026-527611"
+          maxlength="16"
+          oninput="formaterRef(this)"
+          onkeydown="if(event.key==='Enter') chercher()"
+        >
+        <button class="btn-rechercher" id="btn-chercher" onclick="chercher()">
+          Rechercher
+        </button>
+      </div>
+      <div class="search-hint">
+        Le numéro de référence vous a été fourni lors de votre déclaration.<br>
+        Format : <strong>TG-ANNÉE-NUMÉRO</strong> (ex: TG-2026-527611)
+      </div>
+    </div>
+  </div>
+
+  <!-- Résultat -->
+  <div class="result-box" id="result-box">
+
+    <!-- Erreur -->
+    <div id="result-error" style="display:none">
+      <div class="result-error">
+        <div class="icon">❌</div>
+        <div>
+          <h3>Déclaration introuvable</h3>
+          <p>Aucune déclaration ne correspond à ce numéro. Vérifiez le numéro et réessayez.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Succès -->
+    <div id="result-success" style="display:none">
+      <div class="result-success">
+        <div class="result-success-head">
+          <h3>Déclaration trouvée</h3>
+          <span class="ref" id="res-reference">—</span>
+        </div>
+        <div class="result-success-body">
+
+          <!-- Statut -->
+          <div class="statut-bloc" id="res-statut-bloc">
+            <div class="statut-icon" id="res-statut-icon">⏳</div>
+            <div class="statut-info">
+              <h4 id="res-statut-titre">En cours</h4>
+              <p id="res-statut-desc">Votre déclaration est en cours de traitement</p>
+            </div>
+          </div>
+
+          <!-- Infos enfant -->
+          <div class="info-grid">
+            <div class="info-item">
+              <span class="info-label">Nom de l'enfant</span>
+              <span class="info-value" id="res-nom">—</span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">Prénom(s)</span>
+              <span class="info-value" id="res-prenom">—</span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">Date de déclaration</span>
+              <span class="info-value" id="res-date">—</span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">Statut</span>
+              <span class="info-value" id="res-statut">—</span>
+            </div>
+          </div>
+
+          <!-- Timeline -->
+          <div class="timeline">
+            <div class="timeline-title">Progression de la demande</div>
+
+            <div class="timeline-item">
+              <div class="timeline-dot done"></div>
+              <div class="timeline-item-text">
+                <div class="timeline-item-label">✅ Déclaration soumise</div>
+                <div class="timeline-item-date" id="tl-date-soumis">—</div>
+              </div>
+            </div>
+
+            <div class="timeline-item" id="tl-traitement">
+              <div class="timeline-dot active" id="tl-dot-traitement"></div>
+              <div class="timeline-item-text">
+                <div class="timeline-item-label" id="tl-label-traitement">⏳ En cours de traitement</div>
+                <div class="timeline-item-date">Par les agents de l'état civil</div>
+              </div>
+            </div>
+
+            <div class="timeline-item" id="tl-validation">
+              <div class="timeline-dot pending" id="tl-dot-validation"></div>
+              <div class="timeline-item-text">
+                <div class="timeline-item-label" id="tl-label-validation">🔒 Validation officielle</div>
+                <div class="timeline-item-date">Signature et cachet de l'agent</div>
+              </div>
+            </div>
+
+            <div class="timeline-item">
+              <div class="timeline-dot pending" id="tl-dot-acte"></div>
+              <div class="timeline-item-text">
+                <div class="timeline-item-label" id="tl-label-acte">🔒 Acte de naissance disponible</div>
+                <div class="timeline-item-date">Téléchargeable dans votre espace</div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <button class="btn-nouvelle-recherche" onclick="nouvelleRecherche()">
+        🔍 Faire une nouvelle recherche
+      </button>
+    </div>
+
+  </div>
+</div>
+
+<!-- Footer -->
+<footer>
+  <div class="footer-text">© 2026 État Civil Numérique — République du Togo</div>
+  <a class="footer-link" href="accueil_connecte.html">← Retour à l'accueil</a>
+</footer>
+
+<script>
+  const API = 'http://localhost:3000';
+
+  // Formater automatiquement la saisie en TG-XXXX-XXXXXX
+  function formaterRef(input) {
+    let val = input.value.toUpperCase().replace(/[^A-Z0-9]/g, '');
+    if (val.length > 2) val = val.slice(0, 2) + '-' + val.slice(2);
+    if (val.length > 7) val = val.slice(0, 7) + '-' + val.slice(7);
+    input.value = val;
+  }
+
+  // Rechercher une déclaration
+  async function chercher() {
+    const ref = document.getElementById('ref-input').value.trim().toUpperCase();
+
+    if (!ref || ref.length < 10) {
+      document.getElementById('ref-input').focus();
+      return;
+    }
+
+    // Afficher le chargement
+    const btn = document.getElementById('btn-chercher');
+    btn.textContent = '⏳ Recherche...';
+    btn.disabled = true;
+
+    // Cacher les résultats précédents
+    document.getElementById('result-box').classList.remove('show');
+    document.getElementById('result-error').style.display = 'none';
+    document.getElementById('result-success').style.display = 'none';
+
+    try {
+      const response = await fetch(`${API}/api/suivi/${ref}`);
+      const data = await response.json();
+
+      document.getElementById('result-box').classList.add('show');
+
+      if (!response.ok) {
+        // Déclaration non trouvée
+        document.getElementById('result-error').style.display = 'block';
+      } else {
+        // Afficher le résultat
+        afficherResultat(data);
+        document.getElementById('result-success').style.display = 'block';
+      }
+
+    } catch (err) {
+      document.getElementById('result-box').classList.add('show');
+      document.getElementById('result-error').style.display = 'block';
+    } finally {
+      btn.textContent = 'Rechercher';
+      btn.disabled = false;
+    }
+  }
+
+  // Afficher les résultats
+  function afficherResultat(d) {
+    const statut = d.statut || 'En cours';
+
+    document.getElementById('res-reference').textContent = d.reference;
+    document.getElementById('res-nom').textContent = d.enfant_nom;
+    document.getElementById('res-prenom').textContent = d.enfant_prenom;
+    document.getElementById('res-date').textContent = formatDate(d.date_creation);
+    document.getElementById('res-statut').textContent = statut;
+    document.getElementById('tl-date-soumis').textContent = formatDate(d.date_creation);
+
+    // Configurer le bloc statut
+    const statutBloc = document.getElementById('res-statut-bloc');
+    statutBloc.className = 'statut-bloc';
+
+    if (statut === 'Validé') {
+      statutBloc.classList.add('valide');
+      document.getElementById('res-statut-icon').textContent = '✅';
+      document.getElementById('res-statut-titre').textContent = 'Déclaration validée !';
+      document.getElementById('res-statut-desc').textContent = 'Votre acte de naissance est disponible dans votre espace personnel.';
+      // Timeline
+      document.getElementById('tl-dot-traitement').className = 'timeline-dot done';
+      document.getElementById('tl-label-traitement').textContent = '✅ Traitement effectué';
+      document.getElementById('tl-dot-validation').className = 'timeline-dot done';
+      document.getElementById('tl-label-validation').textContent = '✅ Validation officielle effectuée';
+      document.getElementById('tl-dot-acte').className = 'timeline-dot done';
+      document.getElementById('tl-label-acte').textContent = '✅ Acte de naissance disponible';
+
+    } else if (statut === 'Rejeté') {
+      statutBloc.classList.add('rejete');
+      document.getElementById('res-statut-icon').textContent = '❌';
+      document.getElementById('res-statut-titre').textContent = 'Déclaration rejetée';
+      document.getElementById('res-statut-desc').textContent = 'Votre déclaration a été rejetée. Veuillez contacter le bureau de l\'état civil.';
+
+    } else {
+      statutBloc.classList.add('en-cours');
+      document.getElementById('res-statut-icon').textContent = '⏳';
+      document.getElementById('res-statut-titre').textContent = 'En cours de traitement';
+      document.getElementById('res-statut-desc').textContent = 'Votre déclaration est en cours de traitement. L\'acte sera disponible sous 72h.';
+    }
+  }
+
+  // Nouvelle recherche
+  function nouvelleRecherche() {
+    document.getElementById('ref-input').value = '';
+    document.getElementById('result-box').classList.remove('show');
+    document.getElementById('result-error').style.display = 'none';
+    document.getElementById('result-success').style.display = 'none';
+    document.getElementById('ref-input').focus();
+  }
+
+  // Formater une date
+  function formatDate(d) {
+    if (!d) return '—';
+    try { return new Date(d).toLocaleDateString('fr-FR', { day: '2-digit', month: 'long', year: 'numeric' }); }
+    catch { return d; }
+  }
+</script>
+</body>
+</html>
